@@ -138,6 +138,14 @@ public final class ContactsPreferencesActivity extends ExpandableListActivity im
         mDisplayOrder = mContactsPrefs.getDisplayOrder();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mContactsPrefs != null) {
+            mContactsPrefs.unRegisterObserver();
+        }
+    }
+
     private void createWithPhonesOnlyPreferenceView(LayoutInflater inflater) {
         // Add the "Only contacts with phones" header modifier.
         mHeaderPhones = inflater.inflate(R.layout.display_options_phones_only, mList, false);

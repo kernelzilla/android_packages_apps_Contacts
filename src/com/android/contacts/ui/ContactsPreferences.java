@@ -112,6 +112,21 @@ public final class ContactsPreferences  {
                 ContactsContract.Preferences.DISPLAY_ORDER, displayOrder);
     }
 
+    public void unRegisterObserver() {
+        if(mSettingsObserver != null) {
+           mSettingsObserver.unRegister();
+        }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            this.unRegisterObserver();
+        } finally {
+            super.finalize();
+        }
+    }
+
     private class SettingsObserver extends ContentObserver {
 
         public SettingsObserver() {
@@ -125,6 +140,10 @@ public final class ContactsPreferences  {
             mContentResolver.registerContentObserver(
                     Settings.System.getUriFor(
                             ContactsContract.Preferences.DISPLAY_ORDER), false, this);
+        }
+
+        public void unRegister() {
+            mContentResolver.unregisterContentObserver(this);
         }
 
         @Override
